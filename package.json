@@ -1,0 +1,19 @@
+{
+  "name": "controk",
+  "version": "0.0.0",
+  "author": "Jourdan Rodrigues <thiagojourdan@gmail.com>",
+  "contributors": [
+    {
+      "name": "Joseph Rodrigues",
+      "email": "joseph.netrc@gmail.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jourdanrodrigues/controk-socket"
+  },
+  "dependencies": {
+    "express": "^4.14.0",
+    "socket.io": "^1.5.0"
+  }
+}
