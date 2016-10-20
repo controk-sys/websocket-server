@@ -1,11 +1,13 @@
-var http = require('http').Server(require('express')());
-var io = require('socket.io');
-// DATABASE_URL = postgres://{USER}:{PASSWORD}@{HOST}/{DB_NAME}
-var pgClient = new (require('pg').Client)(process.env.DATABASE_URI); // Shortened due to specific need
-var employee = require('./js/employee');
-var client = require('./js/client');
+require("dotenv").config();
 
-const PORT = typeof(process.env.PORT) != "undefined" ? process.env.PORT : 8888;
+var pgClient = new (require('pg').Client)(process.env.DATABASE_URL), // Shortened due to specific need
+    http = require('http').Server(require('express')()),
+    io = require('socket.io')(http);
+
+var employee = require('./js/employee'),
+    client = require('./js/client');
+
+const PORT = typeof(process.env.PORT) != "undefined" ? process.env.PORT : 8080;
 
 io.on("connection", function (socket) {
     // Employee

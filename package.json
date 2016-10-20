@@ -1,6 +1,6 @@
 {
   "name": "controk-socket",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Jourdan Rodrigues <thiagojourdan@gmail.com>",
   "contributors": [
     {
@@ -13,6 +13,7 @@
     "url": "https://github.com/jourdanrodrigues/controk-socket"
   },
   "dependencies": {
+    "dotenv": "^2.0.0",
     "express": "^4.14.0",
     "pg": "^6.1.0",
     "socket.io": "^1.5.0"
