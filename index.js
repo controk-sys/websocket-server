@@ -1,13 +1,15 @@
-require("dotenv").config();
+// Synchronously check if ".env" exists before import
+if (require("fs").existsSync(".env")) require("dotenv").config();
 
-var pgClient = new (require('pg').Client)(process.env.DATABASE_URL), // Shortened due to specific need
+var databaseURL = process.env.DATABASE_URL || "",
+    port = process.env.PORT || "8080";
+
+var pgClient = new (require('pg').Client)(databaseURL), // Shortened due to its specific need
     http = require('http').Server(require('express')()),
     io = require('socket.io')(http);
 
 var employee = require('./js/employee'),
     client = require('./js/client');
-
-const PORT = typeof(process.env.PORT) != "undefined" ? process.env.PORT : 8080;
 
 io.on("connection", function (socket) {
     // Employee
@@ -33,6 +35,6 @@ io.on("connection", function (socket) {
     });
 });
 
-http.listen(PORT, function() {
-    console.log("Listening at port %s.", PORT);
+http.listen(port, function() {
+    console.log("Listening at port %s.", port);
 });
