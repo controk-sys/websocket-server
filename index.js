@@ -1,38 +1,29 @@
-// Synchronously check if ".env" exists before import
-if (require("fs").existsSync(".env")) require("dotenv").config();
+// Check if ".env" exists before import
+if (require("fs").existsSync(".env")) {
+    require("dotenv").config();
+}
 
 var databaseURL = process.env.DATABASE_URL || "",
     port = process.env.PORT || "8080";
 
-var pgClient = new (require('pg').Client)(databaseURL), // Shortened due to its specific need
-    http = require('http').Server(require('express')()),
-    io = require('socket.io')(http);
+var app = require("express")(),
+    http = require("http").Server(app),
+    io = require("socket.io"),
+    sequelize = new (require("sequelize"))(databaseURL, {dialect: "postgres"});
 
-var employee = require('./js/employee'),
-    client = require('./js/client');
+io = io(http);
+
+var Client = require("./controllers/clients")(sequelize);
 
 io.on("connection", function (socket) {
-    // Employee
-    socket.on("create employee", function(data) {
-        employee.create(pgClient, data);
-    });
-    socket.on("update employee", function(data) {
-        employee.update(pgClient, data);
-    });
-    socket.on("delete employee", function(data) {
-        employee.delete(pgClient, data);
-    });
-
     // Client
-    socket.on("create client", function(data) {
-        client.create(pgClient, data);
-    });
     socket.on("update client", function(data) {
-        client.update(pgClient, data);
+        Client.update(data, socket);
     });
-    socket.on("delete client", function(data) {
-        client.delete(pgClient, data);
-    });
+});
+
+app.get("/", function(request, response) {
+    response.send("<h1>Controk WebSocket Server. :)</h1>");
 });
 
 http.listen(port, function() {
