@@ -1,31 +1,31 @@
 module.exports = function (sequelize) {
-    var Client = sequelize.import("../models/Client"),
+    var Employee = sequelize.import("../models/Employee"),
         Address = sequelize.import("../models/Address");
     return {
         /**
          * @param {{
-         * id, name, email, mobile, phone, cpf, observation,
+         * id, name, email, mobile, role, phone, cpf, observation,
          * address: {id, place, place_name, number, complement, neighborhood, city, state, cep}
-         * }} clientData
+         * }} employeeData
          * @param socket
          */
-        update: function (clientData, socket) {
-            Client // Get the client
+        update: function (employeeData, socket) {
+            Employee // Get the employee
                 .findOne({
-                    where: {id: clientData.id}
+                    where: {id: employeeData.id}
                 })
-                .then(function (clientInstance) {
+                .then(function (employee) {
                     Address // Get the address
                         .findOne({
-                            where: {id: clientInstance.address_id}
+                            where: {id: employee.address_id}
                         })
                         .then(function(addressInstance) {
                             // Updates the address
-                            addressInstance.update(clientData.address).then(function() {
-                                delete clientData.address;
+                            addressInstance.update(employeeData.address).then(function() {
+                                delete employeeData.address;
                                 // Updates the client
-                                clientInstance.update(clientData).then(function() {
-                                    socket.emit("update ok", "Client successfully updated.");
+                                employee.update(employeeData).then(function() {
+                                    socket.emit("update ok", "Employee successfully updated.");
                                 });
                             });
                         });

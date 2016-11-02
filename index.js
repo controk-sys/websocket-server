@@ -13,12 +13,22 @@ var app = require("express")(),
 
 io = io(http);
 
-var Client = require("./controllers/clients")(sequelize);
+var Client = require("./controllers/clients")(sequelize),
+    Employee = require("./controllers/employees")(sequelize),
+    Supplier = require("./controllers/suppliers")(sequelize);
 
 io.on("connection", function (socket) {
     // Client
     socket.on("update client", function(data) {
         Client.update(data, socket);
+    });
+    // Employee
+    socket.on("update employee", function(data) {
+        Employee.update(data, socket);
+    });
+    // Supplier
+    socket.on("update supplier", function(data) {
+        Supplier.update(data, socket);
     });
 });
 
