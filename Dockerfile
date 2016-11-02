@@ -1,4 +1,4 @@
-FROM node:6.8.0
+FROM node:6.9.1
 MAINTAINER Jourdan Rodrigues
 
 WORKDIR /project/

@@ -23,9 +23,9 @@ io.on("connection", function (socket) {
 });
 
 app.get("/", function(request, response) {
-    response.send("<h1>Controk WebSocket Server. :)</h1>");
+    response.send("<h1>Controk WebSocket. :)</h1>");
 });
 
-http.listen(port, function() {
-    console.log("Listening at port %s.", port);
+http.listen(port, "0.0.0.0", function() {
+    console.log("WebSocket started.");
 });
