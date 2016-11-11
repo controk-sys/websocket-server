@@ -4,6 +4,26 @@ module.exports = function (sequelize) {
     return {
         /**
          * @param {{
+         * name, email, mobile, phone, cpf, observation,
+         * address: {place, place_name, number, complement, neighborhood, city, state, cep}
+         * }} clientData
+         * @param socket
+         */
+        create: function (clientData, socket) {
+            Address.create(clientData.address).then(function () {
+                delete clientData.address;
+
+                Client.create(clientData).then(function () {
+                    socket.emit("create ok", "Client successfully updated.");
+                }).catch(function (err) {
+                    socket.emit("create failed", err.errors[0].message);
+                });
+            }).catch(function (err) {
+                socket.emit("create failed", err.errors[0].message);
+            });
+        },
+        /**
+         * @param {{
          * id, name, email, mobile, phone, cpf, observation,
          * address: {id, place, place_name, number, complement, neighborhood, city, state, cep}
          * }} clientData
@@ -26,10 +46,14 @@ module.exports = function (sequelize) {
                                 // Updates the client
                                 clientInstance.update(clientData).then(function() {
                                     socket.emit("update ok", "Client successfully updated.");
+                                }).catch(function (err) {
+                                    socket.emit("update failed", err.errors[0].message);
                                 });
+                            }).catch(function (err) {
+                                socket.emit("update failed", err.errors[0].message);
                             });
-                        });
-                });
+                    });
+            });
         }
     }
 };

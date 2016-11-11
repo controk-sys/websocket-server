@@ -19,6 +19,9 @@ var Client = require("./controllers/clients")(sequelize),
 
 io.on("connection", function (socket) {
     // Client
+    socket.on("create client", function(data) {
+        Client.create(data, socket);
+    });
     socket.on("update client", function(data) {
         Client.update(data, socket);
     });
