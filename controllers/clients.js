@@ -4,21 +4,27 @@ module.exports = function (sequelize) {
     return {
         /**
          * @param {{
-         * name, email, mobile, phone, cpf, observation,
+         * name, email, mobile, phone, cpf, observation, address_id,
          * address: {place, place_name, number, complement, neighborhood, city, state, cep}
          * }} clientData
          * @param socket
          */
         create: function (clientData, socket) {
-            Address.create(clientData.address).then(function () {
-                delete clientData.address;
+            Address.create(clientData.address).then(
+                /**
+                 * @param {{ id }} address
+                 */
+                function (address) {
+                    delete clientData.address;
+                    clientData.address_id = address.id;
 
-                Client.create(clientData).then(function () {
-                    socket.emit("create ok", "Client successfully updated.");
-                }).catch(function (err) {
-                    socket.emit("create failed", err.errors[0].message);
-                });
-            }).catch(function (err) {
+                    Client.create(clientData).then(function () {
+                        socket.emit("create ok", "Client successfully updated.");
+                    }).catch(function (err) {
+                        socket.emit("create failed", err.errors[0].message);
+                    });
+                }
+            ).catch(function (err) {
                 socket.emit("create failed", err.errors[0].message);
             });
         },
