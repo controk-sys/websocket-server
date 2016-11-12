@@ -56,3 +56,26 @@ app.get("/", function(request, response) {
 http.listen(port, "0.0.0.0", function() {
     console.log("WebSocket started.");
 });
+
+// Can't think on anything better, right now, so the tests will run this way
+if (process.argv.indexOf("test") == "2") {
+    var test = require("child_process").spawn("mocha");
+
+    // The database will be handled by Django, so this sync is only for tests purposes.
+    sequelize.sync().then(
+        () => { console.log("Sync database performed successfully.") },
+        (error) => { console.log(`Sync database failed: ${error}`); }
+    );
+
+    test.stdout.on("data", (data) => {
+        if (/(\d+ms)/.test(data)) {
+            console.log(data.toString());
+        }
+    });
+
+    test.stderr.on("data", (data) => {
+        console.log(data.toString());
+    });
+
+    test.on("close", process.exit);
+}

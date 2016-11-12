@@ -1,0 +1,23 @@
+language: node_js
+
+node_js:
+  - "6"
+
+services:
+  - postgresql
+
+addons:
+  - postgresql: "9.4"
+
+env:
+  global:
+    - DATABASE_URL=postgres://user_name:user_password@localhost:5432/controk_db
+
+install: "npm install"
+
+before_script:
+  - psql -c "CREATE DATABASE controk_db;" -U postgres
+  - psql -c "CREATE USER user_name WITH PASSWORD 'user_password' CREATEDB;" -U postgres
+
+script:
+  - npm test
