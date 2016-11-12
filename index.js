@@ -15,6 +15,7 @@ io = io(http);
 
 var Client = require("./controllers/clients")(sequelize),
     Employee = require("./controllers/employees")(sequelize),
+    Product = require("./controllers/products")(sequelize),
     Supplier = require("./controllers/suppliers")(sequelize);
 
 io.on("connection", function (socket) {
@@ -26,10 +27,23 @@ io.on("connection", function (socket) {
         Client.update(data, socket);
     });
     // Employee
+    socket.on("create employee", function(data) {
+        Employee.create(data, socket);
+    });
     socket.on("update employee", function(data) {
         Employee.update(data, socket);
     });
+    // Product
+    socket.on("create product", function(data) {
+        Product.create(data, socket);
+    });
+    socket.on("update product", function(data) {
+        Product.update(data, socket);
+    });
     // Supplier
+    socket.on("create supplier", function(data) {
+        Supplier.create(data, socket);
+    });
     socket.on("update supplier", function(data) {
         Supplier.update(data, socket);
     });

@@ -19,13 +19,13 @@ module.exports = function (sequelize) {
                     clientData.address_id = address.id;
 
                     Client.create(clientData).then(function () {
-                        socket.emit("create ok", "Client successfully updated.");
+                        socket.emit("create ok", "Client successfully created.");
                     }).catch(function (err) {
-                        socket.emit("create failed", err.errors[0].message);
+                        socket.emit("create failed", err.message);
                     });
                 }
             ).catch(function (err) {
-                socket.emit("create failed", err.errors[0].message);
+                socket.emit("create failed", err.message);
             });
         },
         /**
@@ -53,10 +53,10 @@ module.exports = function (sequelize) {
                                 clientInstance.update(clientData).then(function() {
                                     socket.emit("update ok", "Client successfully updated.");
                                 }).catch(function (err) {
-                                    socket.emit("update failed", err.errors[0].message);
+                                    socket.emit("update failed", err.message);
                                 });
                             }).catch(function (err) {
-                                socket.emit("update failed", err.errors[0].message);
+                                socket.emit("update failed", err.message);
                             });
                     });
             });
