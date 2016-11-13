@@ -8,7 +8,7 @@ module.exports = function(sequelize, DataTypes) {
             primaryKey: true,
             autoIncrement: true
         },
-        place: {
+        place: { // STREET = 1, AVENUE = 2, SIDE_STREET = 3
             type: DataTypes.INTEGER,
             allowNull: false
         },

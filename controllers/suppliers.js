@@ -60,6 +60,25 @@ module.exports = function (sequelize) {
                             });
                         });
                 });
+        },
+        /**
+         * @param {int} supplierId
+         * @param socket
+         */
+        delete: function (supplierId, socket) {
+            Supplier // Get the supplier
+                .findOne({
+                    where: {id: supplierId}
+                })
+                .then(function (supplierInstance) {
+                    return supplierInstance.destroy();
+                })
+                .then(function () {
+                    socket.emit("delete ok", "Supplier successfully deleted.")
+                })
+                .catch(function (err) {
+                    socket.emit("delete failed", err.message);
+                });
         }
     }
 };

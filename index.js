@@ -23,15 +23,18 @@ io.on("connection", function (socket) {
     socket.on("create client", function(data) {
         Client.create(data, socket);
     });
-    socket.on("update client", function(data) {
-        Client.update(data, socket);
-    });
     socket.on("delete client", function(data) {
         Client.delete(data, socket);
+    });
+    socket.on("update client", function(data) {
+        Client.update(data, socket);
     });
     // Employee
     socket.on("create employee", function(data) {
         Employee.create(data, socket);
+    });
+    socket.on("delete employee", function(data) {
+        Employee.delete(data, socket);
     });
     socket.on("update employee", function(data) {
         Employee.update(data, socket);
@@ -46,6 +49,9 @@ io.on("connection", function (socket) {
     // Supplier
     socket.on("create supplier", function(data) {
         Supplier.create(data, socket);
+    });
+    socket.on("delete supplier", function(data) {
+        Supplier.delete(data, socket);
     });
     socket.on("update supplier", function(data) {
         Supplier.update(data, socket);
@@ -62,7 +68,9 @@ http.listen(port, "0.0.0.0", function() {
 
 // Can't think on anything better, right now, so the tests will run this way
 if (process.argv.indexOf("test") == "2") {
-    var test = require("child_process").spawn("istanbul", ["cover", "node_modules/.bin/_mocha"]);
+    var test = require("child_process").spawn(
+        "istanbul", ["cover", "--include-all-sources", "node_modules/.bin/_mocha", "-R", "spec", "test/**/*"]
+    );
 
     // The database will be handled by Django, so this sync is only for tests purposes.
     sequelize.sync().then(
