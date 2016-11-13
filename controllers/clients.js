@@ -60,6 +60,25 @@ module.exports = function (sequelize) {
                             });
                     });
             });
+        },
+        /**
+         * @param {int} clientId
+         * @param socket
+         */
+        delete: function (clientId, socket) {
+            Client // Get the client
+                .findOne({
+                    where: {id: clientId}
+                })
+                .then(function (clientInstance) {
+                    return clientInstance.destroy();
+                })
+                .then(function () {
+                    socket.emit("delete ok", "Client successfully deleted.")
+                })
+                .catch(function (err) {
+                    socket.emit("delete failed", err.message);
+                });
         }
     }
 };

@@ -3,11 +3,12 @@ if (require("fs").existsSync(".env")) {
     require("dotenv").config();
 }
 
-var should = require("should"),
-    io = require("socket.io-client");
+var databaseURL = process.env.DATABASE_URL || "";
 
-var socketURL = "http://0.0.0.0:" + (process.env.PORT || "8080");
-console.log(socketURL);
+var should = require("should"),
+    io = require("socket.io-client"),
+    socketURL = "http://0.0.0.0:" + (process.env.PORT || "8080"),
+    Client = new (require("sequelize"))(databaseURL, {dialect: "postgres"}).import("../models/Client");
 
 var options = {
     transports: ["websocket"],
@@ -15,10 +16,8 @@ var options = {
 };
 
 describe("Client", () => {
-    it("should be registered successfully", function (done) {
-        var socket = io.connect(socketURL, options);
-
-        var data = {
+    var socket = io.connect(socketURL, options),
+        data = {
             email: "client@email.com",
             mobile: "(085) 9 9999-9999",
             phone: "(085) 3542-3214",
@@ -37,10 +36,36 @@ describe("Client", () => {
             }
         };
 
-        socket.emit("create client", data);
+    it("should be registered successfully", function (done) {
         socket.on("create ok", function (message) {
             message.should.equal("Client successfully created.");
             done();
-        })
+        });
+        socket.emit("create client", data);
     });
+
+    it("should be updated successfully", function (done) {
+        socket.on("update ok", function (message) {
+            message.should.equal("Client successfully updated.");
+            done();
+        });
+
+        Client.findOne().then(function (clientInstance) {
+            data.id = clientInstance.id;
+            data.email = "client@otheremail.com";
+            clientInstance.email.should.not.equal(data.email); // Assure that the emails are different
+            socket.emit("update client", data);
+        });
+    });
+
+    it("should be deleted successfully", function (done) {
+        socket.on("delete ok", function (message) {
+            message.should.equal("Client successfully deleted.");
+            done();
+        });
+
+        Client.findOne().then(function (clientInstance) {
+            socket.emit("delete client", clientInstance.id);
+        });
+    })
 });

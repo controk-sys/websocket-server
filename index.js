@@ -26,6 +26,9 @@ io.on("connection", function (socket) {
     socket.on("update client", function(data) {
         Client.update(data, socket);
     });
+    socket.on("delete client", function(data) {
+        Client.delete(data, socket);
+    });
     // Employee
     socket.on("create employee", function(data) {
         Employee.create(data, socket);
@@ -59,7 +62,7 @@ http.listen(port, "0.0.0.0", function() {
 
 // Can't think on anything better, right now, so the tests will run this way
 if (process.argv.indexOf("test") == "2") {
-    var test = require("child_process").spawn("mocha");
+    var test = require("child_process").spawn("istanbul", ["cover", "node_modules/.bin/_mocha"]);
 
     // The database will be handled by Django, so this sync is only for tests purposes.
     sequelize.sync().then(

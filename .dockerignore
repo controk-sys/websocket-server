@@ -2,9 +2,11 @@
 .env*
 .gitignore
 .travis.yml
+docker-compose.yml
 README.md
 
 # Directories
 .git/
 .idea/
+coverage/
 node_modules/
