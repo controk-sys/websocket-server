@@ -41,6 +41,10 @@ describe("Client", () => {
             message.should.equal("Client successfully created.");
             done();
         });
+        socket.on("create failed", function (message) {
+            message.should.not.be.ok(); // Fail the assertion
+            done();
+        });
         socket.emit("create client", data);
     });
 
@@ -49,11 +53,14 @@ describe("Client", () => {
             message.should.equal("Client successfully updated.");
             done();
         });
+        socket.on("update failed", function (message) {
+            message.should.not.be.ok(); // Fail the assertion
+            done();
+        });
 
         Client.findOne().then(function (clientInstance) {
             data.id = clientInstance.id;
-            data.email = "client@otheremail.com";
-            clientInstance.email.should.not.equal(data.email); // Assure that the emails are different
+            data.email = clientInstance.email + "m"; // Just to assure that something will be different
             socket.emit("update client", data);
         });
     });
@@ -61,6 +68,10 @@ describe("Client", () => {
     it("should be deleted successfully", function (done) {
         socket.on("delete ok", function (message) {
             message.should.equal("Client successfully deleted.");
+            done();
+        });
+        socket.on("delete failed", function (message) {
+            message.should.not.be.ok(); // Fail the assertion
             done();
         });
 
