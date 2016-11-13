@@ -10,3 +10,7 @@ require("../models/Employee");
 require("../models/Product");
 require("../models/Supplier");
 require("./test-client-actions");
+
+describe("Test to add files", () => {
+    it("should do nothing", (done) => { done(); })
+});
