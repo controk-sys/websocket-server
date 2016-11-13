@@ -4,12 +4,13 @@ if (require("fs").existsSync(".env")) {
 }
 
 var databaseURL = process.env.DATABASE_URL || "",
-    port = process.env.PORT || "8080";
+    port = process.env.PORT || "8080",
+    testing = process.argv.indexOf("test") >= 0;
 
 var app = require("express")(),
     http = require("http").Server(app),
     io = require("socket.io"),
-    sequelize = new (require("sequelize"))(databaseURL, {dialect: "postgres"});
+    sequelize = new (require("sequelize"))(databaseURL, {dialect: "postgres", logging: testing ? false : console.log});
 
 io = io(http);
 
