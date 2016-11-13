@@ -67,10 +67,8 @@ http.listen(port, "0.0.0.0", function() {
 });
 
 // Can't think on anything better, right now, so the tests will run this way
-if (process.argv.indexOf("test") == "2") {
-    var test = require("child_process").spawn(
-        "istanbul", ["cover", "--include-all-sources", "node_modules/.bin/_mocha", "-R", "spec", "test/**/*"]
-    );
+if (process.argv.indexOf("test") >= 0) {
+    var test = require("child_process").spawn("mocha", ["-R", "spec", "test/**/*"]);
 
     // The database will be handled by Django, so this sync is only for tests purposes.
     sequelize.sync().then(

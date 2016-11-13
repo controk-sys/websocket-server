@@ -31,6 +31,6 @@
   },
   "scripts": {
     "start": "node index.js",
-    "test": "node index.js test"
+    "test": "istanbul cover index.js -- test"
   }
 }
