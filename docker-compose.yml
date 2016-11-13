@@ -1,0 +1,23 @@
+version: "2"
+
+services:
+
+  db:
+    container_name: db
+    image: postgres:9.6.1
+    environment:
+      - POSTGRES_PASSWORD=controk_pass
+      - POSTGRES_USER=controk_user
+      - POSTGRES_DB=controk_db
+
+  socket:
+    container_name: socket
+    build: .
+    command: npm start
+    environment:
+      - DATABASE_URL=postgres://controk_user:controk_pass@db/controk_db
+      - PORT=8888
+    ports:
+      - "8888:8888"
+    links:
+      - db

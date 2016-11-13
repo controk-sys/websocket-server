@@ -1,6 +1,8 @@
 # Files
 .env*
 .gitignore
+.travis.yml
+README.md
 
 # Directories
 .git/
