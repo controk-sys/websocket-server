@@ -78,5 +78,5 @@ describe("Client", () => {
         Client.findOne().then(function (clientInstance) {
             socket.emit("delete client", clientInstance.id);
         });
-    })
+    });
 });

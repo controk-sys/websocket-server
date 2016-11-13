@@ -79,5 +79,5 @@ describe("Employee", () => {
         Employee.findOne().then(function (employeeInstance) {
             socket.emit("delete employee", employeeInstance.id);
         });
-    })
+    });
 });

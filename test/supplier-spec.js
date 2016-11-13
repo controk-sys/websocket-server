@@ -77,5 +77,5 @@ describe("Supplier", () => {
         Supplier.findOne().then(function (supplierInstance) {
             socket.emit("delete supplier", supplierInstance.id);
         });
-    })
+    });
 });
