@@ -1,13 +1,17 @@
 {
   "name": "controk-socket",
-  "version": "0.1.0",
-  "author": "Jourdan Rodrigues <thiagojourdan@gmail.com>",
+  "version": "0.2.0",
+  "author": {
+    "name": "Jourdan Rodrigues",
+    "email": "thiagojourdan@gmail.com"
+  },
   "contributors": [
     {
       "name": "Joseph Rodrigues",
       "email": "joseph.netrc@gmail.com"
     }
   ],
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/jourdanrodrigues/controk-socket"
@@ -16,6 +20,17 @@
     "dotenv": "^2.0.0",
     "express": "^4.14.0",
     "pg": "^6.1.0",
+    "sequelize": "^3.24.6",
     "socket.io": "^1.5.0"
+  },
+  "devDependencies": {
+    "istanbul": "^0.4.5",
+    "mocha": "^3.1.2",
+    "should": "^11.1.1",
+    "socket.io-client": "^1.5.1"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "test": "istanbul cover --include-all-sources index.js -- test"
   }
 }
